@@ -19,6 +19,17 @@ const apps = [
   { slug: "gmail", name: "Gmail", detail: "Read, search and send email" },
   { slug: "googlecalendar", name: "Calendar", detail: "Check and manage your schedule" },
   { slug: "googledrive", name: "Drive", detail: "Find your files and documents" },
+  { slug: "slack", name: "Slack", detail: "Read channels and send messages" },
+  { slug: "notion", name: "Notion", detail: "Search and update your workspace" },
+  { slug: "github", name: "GitHub", detail: "Work with repositories and issues" },
+  { slug: "linear", name: "Linear", detail: "Manage projects and tasks" },
+  { slug: "zoom", name: "Zoom", detail: "Find and schedule meetings" },
+  { slug: "hubspot", name: "HubSpot", detail: "Work with contacts and deals" },
+  { slug: "salesforce", name: "Salesforce", detail: "Access CRM records and activity" },
+  { slug: "trello", name: "Trello", detail: "Manage boards, lists and cards" },
+  { slug: "asana", name: "Asana", detail: "Check and update team tasks" },
+  { slug: "dropbox", name: "Dropbox", detail: "Find and manage cloud files" },
+  { slug: "discord", name: "Discord", detail: "Read and send server messages" },
 ];
 
 export function SetupAgent({ token }: { token: string }) {
@@ -29,6 +40,8 @@ export function SetupAgent({ token }: { token: string }) {
   const [copied, setCopied] = useState(false);
   const [connections, setConnections] = useState<Record<string, boolean>>({});
   const [connecting, setConnecting] = useState("");
+  const [appSearch, setAppSearch] = useState("");
+  const [showAllApps, setShowAllApps] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -98,6 +111,8 @@ export function SetupAgent({ token }: { token: string }) {
   if (!setup) return null;
 
   const hasAccess = setup.accessGranted;
+  const matchingApps = apps.filter((app) => `${app.name} ${app.detail}`.toLowerCase().includes(appSearch.toLowerCase()));
+  const visibleApps = appSearch || showAllApps ? matchingApps : matchingApps.slice(0, 3);
 
   return (
     <main className="setup-page">
@@ -121,15 +136,17 @@ export function SetupAgent({ token }: { token: string }) {
 
         {hasAccess && (
           <section className="install-card connected-apps-card">
-            <div className="install-step"><b>1</b><div><h2>Connect what Agent can use</h2><p>Tap an app and sign in normally. No API keys or technical setup.</p></div></div>
+            <div className="install-step"><b>1</b><div><h2>Your connections</h2><p>Connect the apps you need now. Return to this private page anytime to add more.</p></div></div>
+            <input className="app-search" type="search" value={appSearch} onChange={(event) => setAppSearch(event.target.value)} placeholder="Search apps…" aria-label="Search connected apps" />
             <div className="app-connect-list">
-              {apps.map((app) => (
+              {visibleApps.map((app) => (
                 <button key={app.slug} className="app-connect-row" disabled={connecting === app.slug || !setup.connectionsConfigured} onClick={() => connectApp(app.slug)}>
                   <span><strong>{app.name}</strong><small>{app.detail}</small></span>
                   <em>{connections[app.slug] ? "Connected ✓" : connecting === app.slug ? "Opening…" : setup.connectionsConfigured ? "Connect" : "Coming online"}</em>
                 </button>
               ))}
             </div>
+            {!appSearch && <button className="show-apps-button" onClick={() => setShowAllApps((current) => !current)}>{showAllApps ? "Show fewer apps" : `Browse all ${apps.length} apps`}</button>}
           </section>
         )}
 

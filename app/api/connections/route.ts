@@ -5,7 +5,10 @@ import { isBillingConfigured } from "@/lib/dodo";
 import { getDatabase } from "@/lib/mongodb";
 import { hasCloudAccess } from "@/lib/access";
 
-const supported = new Set(["gmail", "googlecalendar", "googledrive"]);
+const supported = new Set([
+  "gmail", "googlecalendar", "googledrive", "slack", "notion", "github",
+  "linear", "zoom", "hubspot", "salesforce", "trello", "asana", "dropbox", "discord",
+]);
 
 async function getAgent(token: string) {
   if (!token) return null;
