@@ -20,13 +20,13 @@ const apps = [
   { slug: "gmail", name: "Gmail", detail: "Read, search and send email", icon: "gmail" },
   { slug: "googlecalendar", name: "Calendar", detail: "Check and manage your schedule", icon: "googlecalendar" },
   { slug: "googledrive", name: "Drive", detail: "Find your files and documents", icon: "googledrive" },
-  { slug: "slack", name: "Slack", detail: "Read channels and send messages", icon: "slack" },
+  { slug: "slack", name: "Slack", detail: "Read channels and send messages", icon: "slack", iconUrl: "https://cdn.jsdelivr.net/gh/gilbarbara/logos@master/logos/slack-icon.svg" },
   { slug: "notion", name: "Notion", detail: "Search and update your workspace", icon: "notion" },
   { slug: "github", name: "GitHub", detail: "Work with repositories and issues", icon: "github" },
   { slug: "linear", name: "Linear", detail: "Manage projects and tasks", icon: "linear" },
   { slug: "zoom", name: "Zoom", detail: "Find and schedule meetings", icon: "zoom" },
   { slug: "hubspot", name: "HubSpot", detail: "Work with contacts and deals", icon: "hubspot" },
-  { slug: "salesforce", name: "Salesforce", detail: "Access CRM records and activity", icon: "salesforce" },
+  { slug: "salesforce", name: "Salesforce", detail: "Access CRM records and activity", icon: "salesforce", iconUrl: "https://cdn.jsdelivr.net/gh/gilbarbara/logos@master/logos/salesforce.svg" },
   { slug: "trello", name: "Trello", detail: "Manage boards, lists and cards", icon: "trello" },
   { slug: "asana", name: "Asana", detail: "Check and update team tasks", icon: "asana" },
   { slug: "dropbox", name: "Dropbox", detail: "Find and manage cloud files", icon: "dropbox" },
@@ -145,7 +145,7 @@ export function SetupAgent({ token }: { token: string }) {
             <div className="app-connect-list">
               {visibleApps.map((app) => (
                 <button key={app.slug} className="app-connect-row" disabled={connecting === app.slug || !setup.connectionsConfigured} onClick={() => connectApp(app.slug)}>
-                  <span className="app-connect-identity"><i className="app-logo" style={{ backgroundImage: `url(https://cdn.simpleicons.org/${app.icon})` }} /><span><strong>{app.name}</strong><small>{app.detail}</small></span></span>
+                  <span className="app-connect-identity"><i className="app-logo" style={{ backgroundImage: `url(${app.iconUrl ?? `https://cdn.simpleicons.org/${app.icon}`})` }} /><span><strong>{app.name}</strong><small>{app.detail}</small></span></span>
                   <em>{connections[app.slug] ? "Connected ✓" : connecting === app.slug ? "Opening…" : setup.connectionsConfigured ? "Connect" : "Coming online"}</em>
                 </button>
               ))}

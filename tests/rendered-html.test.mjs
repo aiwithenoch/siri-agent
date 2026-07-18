@@ -18,6 +18,8 @@ test("ships the nontechnical Siri onboarding flow", async () => {
   assert.match(setup, /Add Agent to Siri/);
   assert.match(setup, /\$5\/month/);
   assert.doesNotMatch(setup, /JSON field|Get Dictionary Value/);
+  assert.match(setup, /slack-icon\.svg/);
+  assert.match(setup, /logos\/salesforce\.svg/);
 });
 
 test("requires server-owned billing state before cloud access", async () => {
