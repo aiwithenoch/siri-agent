@@ -6,7 +6,7 @@ import { isComposioConfigured } from "@/lib/composio";
 import { hasCloudAccess, hasOwnerAccess } from "@/lib/access";
 
 export async function GET(request: NextRequest) {
-  const token = request.nextUrl.searchParams.get("token")?.trim() ?? "";
+  const token = request.headers.get("authorization")?.match(/^Bearer ([A-Za-z0-9_-]+)$/)?.[1] ?? "";
   if (!token) return NextResponse.json({ error: "Missing setup token." }, { status: 400 });
 
   const db = await getDatabase();
@@ -20,9 +20,10 @@ export async function GET(request: NextRequest) {
     email: agent.email,
     billingStatus: agent.billingStatus ?? "not_started",
     billingConfigured,
-    accessGranted: hasCloudAccess(agent.email, agent.billingStatus, billingConfigured),
-    ownerAccess: hasOwnerAccess(agent.email),
-    webhookUrl: `${origin}/api/siri/${token}`,
+    accessGranted: hasCloudAccess(agent.ownerAccess, agent.billingStatus, billingConfigured),
+    ownerAccess: hasOwnerAccess(agent.ownerAccess),
+    webhookUrl: `${origin}/api/siri`,
+    privateKey: token,
     shortcutInstallUrl: process.env.NEXT_PUBLIC_SHORTCUT_INSTALL_URL ?? "",
     connectionsConfigured: isComposioConfigured(),
   });

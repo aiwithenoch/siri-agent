@@ -14,7 +14,6 @@ export const maxDuration = 60;
 const MODEL = "gemini-3.5-flash";
 const DAILY_LIMIT = 30;
 
-type RouteContext = { params: Promise<{ token: string }> };
 type StoredMessage = { role: "user" | "assistant"; content: string; createdAt: Date };
 
 function extractQuery(body: unknown) {
@@ -25,10 +24,13 @@ function extractQuery(body: unknown) {
   return typeof value === "string" ? value.trim().slice(0, 800) : "";
 }
 
-async function handleRequest(request: NextRequest, context: RouteContext, queryFromUrl?: string) {
-  const { token } = await context.params;
+async function handleRequest(request: NextRequest) {
+  const token = request.headers.get("authorization")?.match(/^Bearer ([A-Za-z0-9_-]+)$/)?.[1] ?? "";
+  if (!token) {
+    return NextResponse.json({ error: "This Siri connection is invalid or disabled." }, { status: 401 });
+  }
   const tokenHash = hashAgentToken(token);
-  let query = queryFromUrl?.trim().slice(0, 800) ?? "";
+  let query = "";
 
   if (!query && request.method === "POST") {
     const contentType = request.headers.get("content-type") ?? "";
@@ -52,7 +54,7 @@ async function handleRequest(request: NextRequest, context: RouteContext, queryF
       return NextResponse.json({ error: "This Siri connection is invalid or disabled." }, { status: 401 });
     }
 
-    if (!hasCloudAccess(agent.email, agent.billingStatus, isBillingConfigured())) {
+    if (!hasCloudAccess(agent.ownerAccess, agent.billingStatus, isBillingConfigured())) {
       return NextResponse.json(
         { error: "Your cloud trial or subscription is not active. Open your private setup page to continue." },
         { status: 402 },
@@ -138,10 +140,6 @@ async function handleRequest(request: NextRequest, context: RouteContext, queryF
   }
 }
 
-export async function POST(request: NextRequest, context: RouteContext) {
-  return handleRequest(request, context);
-}
-
-export async function GET(request: NextRequest, context: RouteContext) {
-  return handleRequest(request, context, request.nextUrl.searchParams.get("q") ?? "");
+export async function POST(request: NextRequest) {
+  return handleRequest(request);
 }

@@ -9,6 +9,7 @@ type SetupState = {
   billingStatus: string;
   billingConfigured: boolean;
   webhookUrl: string;
+  privateKey: string;
   shortcutInstallUrl: string;
   connectionsConfigured: boolean;
   accessGranted: boolean;
@@ -47,7 +48,10 @@ export function SetupAgent({ token }: { token: string }) {
     let cancelled = false;
     void (async () => {
       try {
-        const response = await fetch(`/api/agents/status?token=${encodeURIComponent(token)}`, { cache: "no-store" });
+        const response = await fetch("/api/agents/status", {
+          cache: "no-store",
+          headers: { Authorization: `Bearer ${token}` },
+        });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error ?? "Could not load this setup.");
         if (!cancelled) setSetup(data);
@@ -62,7 +66,7 @@ export function SetupAgent({ token }: { token: string }) {
 
   useEffect(() => {
     if (!setup?.connectionsConfigured) return;
-    void fetch(`/api/connections?token=${encodeURIComponent(token)}`, { cache: "no-store" })
+    void fetch("/api/connections", { cache: "no-store", headers: { Authorization: `Bearer ${token}` } })
       .then((response) => response.json()).then((data) => setConnections(data.connections ?? {})).catch(() => undefined);
   }, [setup?.connectionsConfigured, token]);
 
@@ -86,7 +90,7 @@ export function SetupAgent({ token }: { token: string }) {
 
   async function copyLink() {
     if (!setup) return;
-    await navigator.clipboard.writeText(setup.webhookUrl);
+    await navigator.clipboard.writeText(setup.privateKey);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   }
@@ -152,9 +156,9 @@ export function SetupAgent({ token }: { token: string }) {
 
         {hasAccess && (
           <section className="install-card">
-            <div className="install-step"><b>2</b><div><h2>Copy your private link</h2><p>This safely connects only your Shortcut to your Agent.</p></div></div>
-            <button className="button button-primary full-button" onClick={copyLink}>{copied ? "Copied ✓" : "Copy private link"}</button>
-            <div className="install-step"><b>3</b><div><h2>Add Agent to Siri</h2><p>Paste the private link when Apple asks, then tap Add Shortcut.</p></div></div>
+            <div className="install-step"><b>2</b><div><h2>Copy your private key</h2><p>This safely connects only your Shortcut to your Agent. Keep it private.</p></div></div>
+            <button className="button button-primary full-button" onClick={copyLink}>{copied ? "Copied ✓" : "Copy private key"}</button>
+            <div className="install-step"><b>3</b><div><h2>Add Agent to Siri</h2><p>Paste the private key when Apple asks, then tap Add Shortcut.</p></div></div>
             <a className={`button button-dark full-button ${!setup.shortcutInstallUrl ? "is-disabled" : ""}`} href={setup.shortcutInstallUrl || undefined}>
               {setup.shortcutInstallUrl ? "Add Agent to Siri" : "Shortcut installer coming next"}
             </a>

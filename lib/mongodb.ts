@@ -10,9 +10,11 @@ function getClientPromise() {
   const uri = process.env.MONGODB_URI;
   if (!uri) throw new Error("MONGODB_URI is not configured");
 
-  const promise = new MongoClient(uri).connect();
-  if (process.env.NODE_ENV !== "production") globalForMongo.mongoClientPromise = promise;
-  return promise;
+  globalForMongo.mongoClientPromise = new MongoClient(uri).connect().catch((error) => {
+    globalForMongo.mongoClientPromise = undefined;
+    throw error;
+  });
+  return globalForMongo.mongoClientPromise;
 }
 
 export async function getDatabase() {

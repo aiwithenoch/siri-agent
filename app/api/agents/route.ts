@@ -49,17 +49,19 @@ export async function POST(request: NextRequest) {
       tokenHash: hashAgentToken(token),
       ipHash,
       status: "active",
+      ownerAccess: false,
       billingStatus: "not_started",
       createdAt: now,
       lastSeenAt: now,
     });
 
-    const webhookUrl = `${request.nextUrl.origin}/api/siri/${token}`;
+    const webhookUrl = `${request.nextUrl.origin}/api/siri`;
     return NextResponse.json({
       name,
       email,
       webhookUrl,
       setupUrl: `/setup/${token}`,
+      privateKey: token,
       phrase: "Agent",
       dailyLimit: 30,
     });

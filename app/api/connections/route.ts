@@ -18,7 +18,7 @@ async function getAgent(token: string) {
 
 export async function GET(request: NextRequest) {
   try {
-    const token = request.nextUrl.searchParams.get("token")?.trim() ?? "";
+    const token = request.headers.get("authorization")?.match(/^Bearer ([A-Za-z0-9_-]+)$/)?.[1] ?? "";
     const agent = await getAgent(token);
     if (!agent) return NextResponse.json({ error: "Invalid private setup link." }, { status: 404 });
     if (!isComposioConfigured()) return NextResponse.json({ configured: false, connections: {} });
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     if (!supported.has(toolkit)) return NextResponse.json({ error: "Unsupported app." }, { status: 400 });
     const agent = await getAgent(String(token).trim());
     if (!agent) return NextResponse.json({ error: "Invalid private setup link." }, { status: 404 });
-    if (!hasCloudAccess(agent.email, agent.billingStatus, isBillingConfigured())) return NextResponse.json({ error: "Start your free day before connecting apps." }, { status: 402 });
+    if (!hasCloudAccess(agent.ownerAccess, agent.billingStatus, isBillingConfigured())) return NextResponse.json({ error: "Start your free day before connecting apps." }, { status: 402 });
     if (!isComposioConfigured()) return NextResponse.json({ error: "App connections are being activated." }, { status: 503 });
     const origin = process.env.NEXT_PUBLIC_APP_URL ?? request.nextUrl.origin;
     const callbackUrl = `${origin}/setup/${encodeURIComponent(token)}?connected=${encodeURIComponent(toolkit)}`;
