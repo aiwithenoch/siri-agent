@@ -154,8 +154,8 @@ export default function Home() {
             </p>
             <ul>
               <li><span>01</span> Create your private Agent</li>
-              <li><span>02</span> Copy your private link</li>
-              <li><span>03</span> Tap Add Agent to Siri</li>
+              <li><span>02</span> Tap Install Agent on iPhone</li>
+              <li><span>03</span> Paste, then tap Add Shortcut</li>
             </ul>
           </div>
           <ConnectSiri />

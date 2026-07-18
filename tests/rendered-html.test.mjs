@@ -14,10 +14,10 @@ test("ships the nontechnical Siri onboarding flow", async () => {
   assert.match(home, /Hey Siri, Agent/);
   assert.match(connect, /1 day free/);
   assert.match(connect, /Create my Agent/);
-  assert.match(setup, /Copy private key/);
-  assert.match(setup, /Add Agent to Siri/);
+  assert.match(setup, /Install Agent on iPhone/);
+  assert.match(setup, /Paste when Apple asks/);
   assert.match(setup, /\$5\/month/);
-  assert.doesNotMatch(setup, /JSON field|Get Dictionary Value/);
+  assert.doesNotMatch(setup, /JSON field|Get Dictionary Value|Authorization header/);
   assert.match(setup, /slack-icon\.svg/);
   assert.match(setup, /logos\/salesforce\.svg/);
 });

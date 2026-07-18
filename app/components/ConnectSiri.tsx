@@ -115,7 +115,7 @@ export function ConnectSiri() {
       <div className="setup-header">
         <span className="connect-status"><i /> AGENT ONLINE</span>
         <h3>{setup.name}&apos;s agent is ready.</h3>
-        <p>Test it here, then create the “Agent” Shortcut on your iPhone.</p>
+        <p>Test it here, then use the one-tap iPhone installer on your private setup page.</p>
       </div>
 
       <form className="live-test" onSubmit={testAgent}>
@@ -135,12 +135,9 @@ export function ConnectSiri() {
       <div className="shortcut-steps">
         <h4>Connect Apple Shortcuts</h4>
         <ol>
-          <li><b>Open Shortcuts</b><span>Create a shortcut named “{setup.phrase}”.</span></li>
-          <li><b>Add “Dictate Text”</b><span>This captures your question after Siri launches it.</span></li>
-          <li><b>Add “Get Contents of URL”</b><span>Set Method to POST, paste the Agent URL, and add an Authorization header with <code>Bearer [your private key]</code>.</span></li>
-          <li><b>Add JSON field</b><span>Set the request body field <code>query</code> to Dictated Text.</span></li>
-          <li><b>Read the result</b><span>Add “Get Dictionary Value” and enter <code>answer</code>.</span></li>
-          <li><b>Speak it</b><span>Add “Speak Text”. Say “Hey Siri, {setup.phrase}”, then speak your request when Siri listens.</span></li>
+          <li><b>Tap the installer</b><span>Your private setup page copies the secure key and opens Apple Shortcuts for you.</span></li>
+          <li><b>Paste and add</b><span>Tap Paste when Apple asks, then tap Add Shortcut.</span></li>
+          <li><b>Talk naturally</b><span>Say “Hey Siri, {setup.phrase}”, then say what you need.</span></li>
         </ol>
       </div>
 

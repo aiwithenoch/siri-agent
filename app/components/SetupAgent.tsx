@@ -39,6 +39,7 @@ export function SetupAgent({ token }: { token: string }) {
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [installing, setInstalling] = useState(false);
   const [connections, setConnections] = useState<Record<string, boolean>>({});
   const [connecting, setConnecting] = useState("");
   const [appSearch, setAppSearch] = useState("");
@@ -88,7 +89,22 @@ export function SetupAgent({ token }: { token: string }) {
     }
   }
 
-  async function copyLink() {
+  async function installOnIPhone() {
+    if (!setup) return;
+    if (!setup.shortcutInstallUrl) {
+      setError("The iPhone installer is being connected. Please try again shortly.");
+      return;
+    }
+    setInstalling(true);
+    setError("");
+    await navigator.clipboard.writeText(setup.privateKey);
+    setCopied(true);
+    window.setTimeout(() => {
+      window.location.assign(setup.shortcutInstallUrl);
+    }, 450);
+  }
+
+  async function copyKeyAgain() {
     if (!setup) return;
     await navigator.clipboard.writeText(setup.privateKey);
     setCopied(true);
@@ -124,7 +140,7 @@ export function SetupAgent({ token }: { token: string }) {
         <Link className="brand" href="/"><span className="brand-mark"><i /><i /><i /></span><span>Siri Agent</span></Link>
         <span className="connect-status"><i /> PRIVATE SETUP</span>
         <h1>{setup.name}, let&apos;s put Agent on your iPhone.</h1>
-        <p className="setup-lede">No coding. No JSON. Copy one private link, open the ready-made Shortcut, paste, and save.</p>
+        <p className="setup-lede">No coding and no settings. Tap one button, paste when Apple asks, then add the Shortcut.</p>
         {setup.ownerAccess && <p className="owner-pass">Owner pass active · no subscription required</p>}
 
         {!hasAccess && (
@@ -140,7 +156,7 @@ export function SetupAgent({ token }: { token: string }) {
 
         {hasAccess && (
           <section className="install-card connected-apps-card">
-            <div className="install-step"><b>1</b><div><h2>Your connections</h2><p>Connect the apps you need now. Return to this private page anytime to add more.</p></div></div>
+            <div className="install-step"><b>1</b><div><h2>Your connections <small>Optional</small></h2><p>You do not have to connect everything now. Add or remove apps here anytime.</p></div></div>
             <input className="app-search" type="search" value={appSearch} onChange={(event) => setAppSearch(event.target.value)} placeholder="Search apps…" aria-label="Search connected apps" />
             <div className="app-connect-list">
               {visibleApps.map((app) => (
@@ -156,12 +172,12 @@ export function SetupAgent({ token }: { token: string }) {
 
         {hasAccess && (
           <section className="install-card">
-            <div className="install-step"><b>2</b><div><h2>Copy your private key</h2><p>This safely connects only your Shortcut to your Agent. Keep it private.</p></div></div>
-            <button className="button button-primary full-button" onClick={copyLink}>{copied ? "Copied ✓" : "Copy private key"}</button>
-            <div className="install-step"><b>3</b><div><h2>Add Agent to Siri</h2><p>Paste the private key when Apple asks, then tap Add Shortcut.</p></div></div>
-            <a className={`button button-dark full-button ${!setup.shortcutInstallUrl ? "is-disabled" : ""}`} href={setup.shortcutInstallUrl || undefined}>
-              {setup.shortcutInstallUrl ? "Add Agent to Siri" : "Shortcut installer coming next"}
-            </a>
+            <div className="install-step"><b>2</b><div><h2>Install Agent on your iPhone</h2><p>We copy your secure key automatically. When Apple opens, tap <strong>Paste</strong>, then <strong>Add Shortcut</strong>.</p></div></div>
+            <button className="button button-dark full-button" disabled={installing || !setup.shortcutInstallUrl} onClick={installOnIPhone}>
+              {installing ? "Opening Apple Shortcuts…" : setup.shortcutInstallUrl ? "Install Agent on iPhone" : "iPhone installer coming online"}
+            </button>
+            {copied && <p className="install-confirmation">Key copied ✓ Now tap Paste when Apple asks.</p>}
+            <button className="show-apps-button" type="button" onClick={copyKeyAgain}>Copy key again</button>
             <div className="ready-phrase"><span>Then say</span><strong>“Hey Siri, Agent”</strong></div>
           </section>
         )}
