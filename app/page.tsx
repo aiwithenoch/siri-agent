@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BrandStrip, SiriSimulation } from "./components/SiriSimulation";
 
 export const metadata: Metadata = {
   title: "Siri Agent — Turn Siri into your personal AI agent",
@@ -59,34 +60,17 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="hero-visual" id="demo" aria-label="Example Siri conversation">
+        <div className="hero-visual" id="demo" aria-label="Interactive Siri conversation">
           <div className="orb orb-one" />
           <div className="orb orb-two" />
-          <div className="phone">
-            <div className="phone-top"><span>9:41</span><i /><span>●●●</span></div>
-            <div className="siri-glow"><span className="wave"><i /><i /><i /><i /><i /></span></div>
-            <p className="siri-label">SIRI</p>
-            <div className="speech user-speech">
-              <span>You said</span>
-              “Check my email and tell me what&apos;s urgent.”
-            </div>
-            <div className="thinking"><i /><i /><i /> Your agent is working across your apps</div>
-            <div className="speech agent-speech">
-              <span>Your agent</span>
-              You have 3 urgent emails. Ama needs the proposal by noon. I&apos;ve drafted a reply—want me to send it?
-            </div>
-            <div className="phone-home" />
-          </div>
-          <div className="floating-card card-memory"><span>◆</span><div><b>Context remembered</b><small>MongoDB memory</small></div></div>
-          <div className="floating-card card-action"><span>✓</span><div><b>Gmail checked</b><small>via Composio</small></div></div>
+          <SiriSimulation />
         </div>
       </section>
 
       <section className="tool-strip" aria-label="Supported tools">
         <div className="shell tool-row">
           <p>ONE VOICE. ALL YOUR TOOLS.</p>
-          {tools.map((tool) => <span key={tool}>{tool}</span>)}
-          <span>+ 250 more</span>
+          <BrandStrip />
         </div>
       </section>
 
