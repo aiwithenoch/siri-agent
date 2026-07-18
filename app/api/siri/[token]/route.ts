@@ -1,13 +1,15 @@
-import { GoogleGenAI } from "@google/genai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { generateText, stepCountIs } from "ai";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { hashAgentToken } from "@/lib/agent-auth";
 import { getDatabase } from "@/lib/mongodb";
 import { isBillingConfigured } from "@/lib/dodo";
 import { hasCloudAccess } from "@/lib/access";
+import { getComposioForVercel, isComposioConfigured } from "@/lib/composio";
 
 export const runtime = "nodejs";
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 const MODEL = "gemini-3.5-flash";
 const DAILY_LIMIT = 30;
@@ -83,26 +85,30 @@ async function handleRequest(request: NextRequest, context: RouteContext, queryF
       .toArray();
 
     const history = recent.reverse().map((message) => ({
-      role: message.role === "assistant" ? "model" : "user",
-      parts: [{ text: message.content }],
+      role: message.role,
+      content: message.content,
     }));
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) throw new Error("GEMINI_API_KEY is not configured");
 
-    const ai = new GoogleGenAI({ apiKey });
-    const response = await ai.models.generateContent({
-      model: MODEL,
-      contents: [...history, { role: "user", parts: [{ text: query }] }],
-      config: {
-        systemInstruction:
-          `You are ${agent.name}'s personal Siri agent. Respond naturally for speech. ` +
-          "Be concise, helpful, and honest. Use the conversation history for continuity. " +
-          "Never claim you completed an external action unless a tool result proves it. " +
-          "For this early test, explain that app actions are coming soon when asked to send, book, or modify something.",
-        temperature: 0.4,
-        maxOutputTokens: 640,
-      },
+    const google = createGoogleGenerativeAI({ apiKey });
+    const tools = isComposioConfigured()
+      ? await (await getComposioForVercel().sessions.create(agent._id.toString())).tools()
+      : undefined;
+    const response = await generateText({
+      model: google(MODEL),
+      messages: [...history, { role: "user", content: query }],
+      tools,
+      stopWhen: stepCountIs(8),
+      system:
+        `You are ${agent.name}'s personal Siri agent. Respond naturally for speech. ` +
+        "Be concise, helpful, and honest. Use connected-app tools whenever they are needed. " +
+        "Never claim an external action succeeded unless its tool result proves it. " +
+        "When the user explicitly asks to send, create, update, schedule, or delete something, that request is authorization to perform it. " +
+        "If a required app is not connected, clearly tell the user which app to connect on their private setup page.",
+      temperature: 0.4,
+      maxOutputTokens: 640,
     });
 
     const answer = response.text?.trim();
