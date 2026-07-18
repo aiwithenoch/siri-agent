@@ -25,7 +25,7 @@ The Apple Shortcut is named `Agent`. The dependable voice flow is: say
 - Vercel
 - MongoDB Atlas
 - Google Gemini
-- Composio (planned tool connections)
+- Composio hosted OAuth connections
 
 ## Local development
 
@@ -51,7 +51,21 @@ Backend work will use:
 ```text
 MONGODB_URI=
 GEMINI_API_KEY=
+COMPOSIO_API_KEY=
+DODO_PAYMENTS_API_KEY=
+DODO_PAYMENTS_WEBHOOK_KEY=
+DODO_PAYMENTS_PRODUCT_ID=
+DODO_PAYMENTS_ENVIRONMENT=test_mode
+NEXT_PUBLIC_APP_URL=https://siriagent.aiwithenoch.com
+NEXT_PUBLIC_SHORTCUT_INSTALL_URL=
 ```
+
+The Dodo product must be a monthly `$5` subscription. Checkout overrides its trial to one day,
+requires a credit/debit card mandate, and grants cloud access only after a signed subscription webhook.
+
+`NEXT_PUBLIC_SHORTCUT_INSTALL_URL` is the public iCloud share URL for the prebuilt Apple Shortcut.
+The Shortcut asks for the copied private webhook during import, then dictates a request, posts the
+`query`, reads the `answer` field, and speaks it.
 
 Never commit `.env` files or credentials. Environment files are ignored by Git.
 
@@ -59,7 +73,7 @@ Never commit `.env` files or credentials. Environment files are ignored by Git.
 
 - Shareable prebuilt Apple Shortcut
 - Account dashboard and webhook revocation
-- Composio account connections and tool calling
+- Execute connected Composio tools from Gemini function calls
 - Streaming and spoken responses
 - Audit log and permission controls
 

@@ -9,11 +9,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs",
+    "test": "pnpm build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
   },
   "dependencies": {
+    "@composio/core": "^0.14.0",
     "@google/genai": "^2.12.0",
+    "dodopayments": "^2.42.2",
     "mongodb": "^7.5.0",
     "next": "16.2.6",
     "react": "19.2.6",

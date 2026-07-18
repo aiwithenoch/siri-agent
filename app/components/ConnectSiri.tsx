@@ -4,13 +4,16 @@ import { FormEvent, useState } from "react";
 
 type AgentSetup = {
   name: string;
+  email: string;
   webhookUrl: string;
+  setupUrl: string;
   phrase: string;
   dailyLimit: number;
 };
 
 export function ConnectSiri() {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [setup, setSetup] = useState<AgentSetup | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -28,11 +31,12 @@ export function ConnectSiri() {
       const response = await fetch("/api/agents", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, email }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error ?? "Could not create your agent.");
       setSetup(data);
+      window.location.href = data.setupUrl;
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not create your agent.");
     } finally {
@@ -75,7 +79,7 @@ export function ConnectSiri() {
       <div className="connect-card">
         <span className="connect-status"><i /> LIVE TEST</span>
         <h3>Create your Siri agent</h3>
-        <p>Get a private webhook, test the live AI, then connect it to Apple Shortcuts.</p>
+        <p>Get your private Agent link, start a free day, and add the ready-made Shortcut to your iPhone.</p>
         <form className="connect-form" onSubmit={createAgent}>
           <label htmlFor="agent-name">What should your agent call you?</label>
           <div>
@@ -87,11 +91,20 @@ export function ConnectSiri() {
               required
               value={name}
             />
-            <button disabled={loading} type="submit">{loading ? "Creating…" : "Create agent"}</button>
           </div>
+          <label htmlFor="agent-email">Where should we send account and billing updates?</label>
+          <input
+            id="agent-email"
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="you@example.com"
+            required
+            type="email"
+            value={email}
+          />
+          <button className="create-agent-button" disabled={loading} type="submit">{loading ? "Creating…" : "Create my Agent"}</button>
         </form>
         {error && <p className="connect-error">{error}</p>}
-        <small>No card required · 30 test conversations per day</small>
+        <small>1 day free · Card required · Then $5/month · Cancel anytime</small>
       </div>
     );
   }

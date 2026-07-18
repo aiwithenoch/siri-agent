@@ -14,11 +14,15 @@ function requestIp(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as { name?: unknown };
+    const body = (await request.json()) as { name?: unknown; email?: unknown };
     const name = typeof body.name === "string" ? body.name.trim().slice(0, 60) : "";
+    const email = typeof body.email === "string" ? body.email.trim().toLowerCase().slice(0, 160) : "";
 
     if (name.length < 2) {
       return NextResponse.json({ error: "Enter your name to create an agent." }, { status: 400 });
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
     }
 
     const db = await getDatabase();
@@ -37,9 +41,11 @@ export async function POST(request: NextRequest) {
     const now = new Date();
     await db.collection("agents").insertOne({
       name,
+      email,
       tokenHash: hashAgentToken(token),
       ipHash,
       status: "active",
+      billingStatus: "not_started",
       createdAt: now,
       lastSeenAt: now,
     });
@@ -47,7 +53,9 @@ export async function POST(request: NextRequest) {
     const webhookUrl = `${request.nextUrl.origin}/api/siri/${token}`;
     return NextResponse.json({
       name,
+      email,
       webhookUrl,
+      setupUrl: `/setup/${token}`,
       phrase: "Agent",
       dailyLimit: 30,
     });

@@ -8,8 +8,6 @@ export const metadata: Metadata = {
     "Connect the Siri already on your iPhone to an AI agent that can reason, remember, and take action across your apps.",
 };
 
-const tools = ["Gmail", "Calendar", "WhatsApp", "Notion", "Slack", "Drive"];
-
 const useCases = [
   {
     number: "01",
@@ -79,13 +77,13 @@ export default function Home() {
         <div className="section-heading">
           <p className="kicker">HOW IT WORKS</p>
           <h2>Your voice starts it.<br />Your agent handles the rest.</h2>
-          <p>No new assistant to learn. No complicated dashboard. Speak to Siri the way you already do.</p>
+            <p>No new assistant to learn. No complicated dashboard. Say “Hey Siri, Agent,” then speak your request.</p>
         </div>
         <div className="steps">
           <article>
             <span className="step-icon">⌁</span><b>01</b>
             <h3>Speak to your iPhone</h3>
-            <p>Say “Hey Siri, ask my agent…” followed by anything you need done.</p>
+            <p>Say “Hey Siri, Agent,” then tell it anything you need done.</p>
           </article>
           <article>
             <span className="step-icon">✦</span><b>02</b>
@@ -149,16 +147,15 @@ export default function Home() {
       <section className="connect-section" id="connect">
         <div className="shell connect-layout">
           <div className="connect-copy">
-            <p className="kicker">WORKING MVP</p>
+            <p className="kicker">SET UP IN MINUTES</p>
             <h2>Connect your real Siri.<br />Talk to your live agent.</h2>
             <p>
-              Create a private endpoint, test the agent instantly, and wire it into the Shortcuts app already on your iPhone.
-              Gemini answers in real time while MongoDB remembers the conversation.
+              Create your private Agent, start a one-day card-required trial, then add the ready-made Shortcut to your iPhone.
             </p>
             <ul>
-              <li><span>01</span> Create your private agent</li>
-              <li><span>02</span> Test the live conversation</li>
-              <li><span>03</span> Add the webhook to Shortcuts</li>
+              <li><span>01</span> Create your private Agent</li>
+              <li><span>02</span> Copy your private link</li>
+              <li><span>03</span> Tap Add Agent to Siri</li>
             </ul>
           </div>
           <ConnectSiri />
