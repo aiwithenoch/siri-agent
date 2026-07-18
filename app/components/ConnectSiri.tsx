@@ -101,7 +101,7 @@ export function ConnectSiri() {
       <div className="setup-header">
         <span className="connect-status"><i /> AGENT ONLINE</span>
         <h3>{setup.name}&apos;s agent is ready.</h3>
-        <p>Test it here, then complete the six steps in Apple Shortcuts.</p>
+        <p>Test it here, then create the “Agent” Shortcut on your iPhone.</p>
       </div>
 
       <form className="live-test" onSubmit={testAgent}>
@@ -126,7 +126,7 @@ export function ConnectSiri() {
           <li><b>Add “Get Contents of URL”</b><span>Set Method to POST and paste your private URL.</span></li>
           <li><b>Add JSON field</b><span>Set the request body field <code>query</code> to Dictated Text.</span></li>
           <li><b>Read the result</b><span>Add “Get Dictionary Value” and enter <code>answer</code>.</span></li>
-          <li><b>Speak it</b><span>Add “Speak Text”, then say “Hey Siri, {setup.phrase}”.</span></li>
+          <li><b>Speak it</b><span>Add “Speak Text”. Say “Hey Siri, {setup.phrase}”, then speak your request when Siri listens.</span></li>
         </ol>
       </div>
 

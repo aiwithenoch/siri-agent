@@ -14,6 +14,9 @@ iPhone Siri -> Apple Shortcut -> Agent API -> Composio tools
 
 The repository includes the public landing page, live agent onboarding, a secure Siri webhook, and MongoDB-backed conversational memory.
 
+The Apple Shortcut is named `Agent`. The dependable voice flow is: say
+“Hey Siri, Agent,” then speak the request when the shortcut starts listening.
+
 ## Stack
 
 - Next.js 16 and React 19

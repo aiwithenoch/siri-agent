@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       name,
       webhookUrl,
-      phrase: "Ask My Agent",
+      phrase: "Agent",
       dailyLimit: 30,
     });
   } catch (error) {
