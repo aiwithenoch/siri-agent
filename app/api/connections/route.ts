@@ -3,6 +3,7 @@ import { hashAgentToken } from "@/lib/agent-auth";
 import { getComposio, isComposioConfigured } from "@/lib/composio";
 import { isBillingConfigured } from "@/lib/dodo";
 import { getDatabase } from "@/lib/mongodb";
+import { hasCloudAccess } from "@/lib/access";
 
 const supported = new Set(["gmail", "googlecalendar", "googledrive"]);
 
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
     if (!supported.has(toolkit)) return NextResponse.json({ error: "Unsupported app." }, { status: 400 });
     const agent = await getAgent(String(token).trim());
     if (!agent) return NextResponse.json({ error: "Invalid private setup link." }, { status: 404 });
-    if (isBillingConfigured() && agent.billingStatus !== "active") return NextResponse.json({ error: "Start your free day before connecting apps." }, { status: 402 });
+    if (!hasCloudAccess(agent.email, agent.billingStatus, isBillingConfigured())) return NextResponse.json({ error: "Start your free day before connecting apps." }, { status: 402 });
     if (!isComposioConfigured()) return NextResponse.json({ error: "App connections are being activated." }, { status: 503 });
     const origin = process.env.NEXT_PUBLIC_APP_URL ?? request.nextUrl.origin;
     const callbackUrl = `${origin}/setup/${encodeURIComponent(token)}?connected=${encodeURIComponent(toolkit)}`;

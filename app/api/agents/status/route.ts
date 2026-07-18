@@ -3,6 +3,7 @@ import { hashAgentToken } from "@/lib/agent-auth";
 import { isBillingConfigured } from "@/lib/dodo";
 import { getDatabase } from "@/lib/mongodb";
 import { isComposioConfigured } from "@/lib/composio";
+import { hasCloudAccess, hasOwnerAccess } from "@/lib/access";
 
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get("token")?.trim() ?? "";
@@ -13,11 +14,14 @@ export async function GET(request: NextRequest) {
   if (!agent) return NextResponse.json({ error: "This setup link is invalid." }, { status: 404 });
 
   const origin = process.env.NEXT_PUBLIC_APP_URL ?? request.nextUrl.origin;
+  const billingConfigured = isBillingConfigured();
   return NextResponse.json({
     name: agent.name,
     email: agent.email,
     billingStatus: agent.billingStatus ?? "not_started",
-    billingConfigured: isBillingConfigured(),
+    billingConfigured,
+    accessGranted: hasCloudAccess(agent.email, agent.billingStatus, billingConfigured),
+    ownerAccess: hasOwnerAccess(agent.email),
     webhookUrl: `${origin}/api/siri/${token}`,
     shortcutInstallUrl: process.env.NEXT_PUBLIC_SHORTCUT_INSTALL_URL ?? "",
     connectionsConfigured: isComposioConfigured(),

@@ -21,17 +21,20 @@ test("ships the nontechnical Siri onboarding flow", async () => {
 });
 
 test("requires signed billing state before cloud access", async () => {
-  const [checkout, webhook, siri, dodo] = await Promise.all([
+  const [checkout, webhook, siri, dodo, access] = await Promise.all([
     read("app/api/checkout/route.ts"),
     read("app/api/webhooks/dodo/route.ts"),
     read("app/api/siri/[token]/route.ts"),
     read("lib/dodo.ts"),
+    read("lib/access.ts"),
   ]);
 
   assert.match(checkout, /trial_period_days:\s*1/);
   assert.match(checkout, /allowed_payment_method_types:\s*\["credit",\s*"debit"\]/);
   assert.match(webhook, /webhooks\.unwrap/);
   assert.match(webhook, /webhookId/);
-  assert.match(siri, /billingStatus !== "active"/);
+  assert.match(siri, /hasCloudAccess/);
+  assert.match(access, /billingStatus === "active"/);
+  assert.match(access, /aiwithenoch@gmail\.com/);
   assert.match(dodo, /DODO_PAYMENTS_WEBHOOK_KEY/);
 });

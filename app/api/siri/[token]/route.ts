@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { hashAgentToken } from "@/lib/agent-auth";
 import { getDatabase } from "@/lib/mongodb";
 import { isBillingConfigured } from "@/lib/dodo";
+import { hasCloudAccess } from "@/lib/access";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -49,7 +50,7 @@ async function handleRequest(request: NextRequest, context: RouteContext, queryF
       return NextResponse.json({ error: "This Siri connection is invalid or disabled." }, { status: 401 });
     }
 
-    if (isBillingConfigured() && agent.billingStatus !== "active") {
+    if (!hasCloudAccess(agent.email, agent.billingStatus, isBillingConfigured())) {
       return NextResponse.json(
         { error: "Your cloud trial or subscription is not active. Open your private setup page to continue." },
         { status: 402 },

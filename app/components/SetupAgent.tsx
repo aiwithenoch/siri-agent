@@ -11,6 +11,8 @@ type SetupState = {
   webhookUrl: string;
   shortcutInstallUrl: string;
   connectionsConfigured: boolean;
+  accessGranted: boolean;
+  ownerAccess: boolean;
 };
 
 const apps = [
@@ -95,7 +97,7 @@ export function SetupAgent({ token }: { token: string }) {
   if (error && !setup) return <main className="setup-page"><div className="setup-shell"><h1>Setup link unavailable</h1><p>{error}</p></div></main>;
   if (!setup) return null;
 
-  const hasAccess = setup.billingStatus === "active" || !setup.billingConfigured;
+  const hasAccess = setup.accessGranted;
 
   return (
     <main className="setup-page">
@@ -104,6 +106,7 @@ export function SetupAgent({ token }: { token: string }) {
         <span className="connect-status"><i /> PRIVATE SETUP</span>
         <h1>{setup.name}, let&apos;s put Agent on your iPhone.</h1>
         <p className="setup-lede">No coding. No JSON. Copy one private link, open the ready-made Shortcut, paste, and save.</p>
+        {setup.ownerAccess && <p className="owner-pass">Owner pass active · no subscription required</p>}
 
         {!hasAccess && (
           <section className="trial-card">
