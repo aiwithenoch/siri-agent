@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Memfy — Your Siri, upgraded",
+  title: "Siri Agent — Your Siri, upgraded",
   description: "Connect the Siri on your iPhone to an AI agent that remembers context and takes action across your apps.",
   icons: {
     icon: "/favicon.svg",

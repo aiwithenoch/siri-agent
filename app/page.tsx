@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Memfy — Turn Siri into your personal AI agent",
+  title: "Siri Agent — Turn Siri into your personal AI agent",
   description:
     "Connect the Siri already on your iPhone to an AI agent that can reason, remember, and take action across your apps.",
 };
@@ -12,17 +12,17 @@ const useCases = [
   {
     number: "01",
     command: "Hey Siri, check my important emails.",
-    result: "Memfy reads, prioritizes, and summarizes what needs your attention.",
+    result: "Your agent reads, prioritizes, and summarizes what needs your attention.",
   },
   {
     number: "02",
     command: "Hey Siri, move my 3 PM meeting.",
-    result: "Memfy checks availability, updates the event, and notifies attendees.",
+    result: "Your agent checks availability, updates the event, and notifies attendees.",
   },
   {
     number: "03",
     command: "Hey Siri, remind Kojo about his class.",
-    result: "Memfy remembers the context and sends through the right connected tool.",
+    result: "Your agent remembers the context and sends through the right connected tool.",
   },
 ];
 
@@ -30,9 +30,9 @@ export default function Home() {
   return (
     <main>
       <nav className="nav shell" aria-label="Main navigation">
-        <a className="brand" href="#top" aria-label="Memfy home">
+        <a className="brand" href="#top" aria-label="Siri Agent home">
           <span className="brand-mark"><i /><i /><i /></span>
-          <span>memfy</span>
+          <span>Siri Agent</span>
         </a>
         <div className="nav-links">
           <a href="#how">How it works</a>
@@ -46,7 +46,7 @@ export default function Home() {
           <div className="eyebrow"><span /> Built for the Siri already in your pocket</div>
           <h1>Don&apos;t replace Siri.<br /><em>Make it powerful.</em></h1>
           <p className="hero-lede">
-            Memfy connects your real iPhone Siri to an AI agent that can reason,
+            Connect your real iPhone Siri to an AI agent that can reason,
             remember, and take action across your apps.
           </p>
           <div className="hero-actions">
@@ -70,9 +70,9 @@ export default function Home() {
               <span>You said</span>
               “Check my email and tell me what&apos;s urgent.”
             </div>
-            <div className="thinking"><i /><i /><i /> Memfy is working across your apps</div>
+            <div className="thinking"><i /><i /><i /> Your agent is working across your apps</div>
             <div className="speech agent-speech">
-              <span>Memfy</span>
+              <span>Your agent</span>
               You have 3 urgent emails. Ama needs the proposal by noon. I&apos;ve drafted a reply—want me to send it?
             </div>
             <div className="phone-home" />
@@ -93,14 +93,14 @@ export default function Home() {
       <section className="section shell" id="how">
         <div className="section-heading">
           <p className="kicker">HOW IT WORKS</p>
-          <h2>Your voice starts it.<br />Memfy handles the rest.</h2>
+          <h2>Your voice starts it.<br />Your agent handles the rest.</h2>
           <p>No new assistant to learn. No complicated dashboard. Speak to Siri the way you already do.</p>
         </div>
         <div className="steps">
           <article>
             <span className="step-icon">⌁</span><b>01</b>
             <h3>Speak to your iPhone</h3>
-            <p>Say “Hey Siri, ask Memfy…” followed by anything you need done.</p>
+            <p>Say “Hey Siri, ask my agent…” followed by anything you need done.</p>
           </article>
           <article>
             <span className="step-icon">✦</span><b>02</b>
@@ -148,10 +148,10 @@ export default function Home() {
             <li><span>✓</span> Memory can be reviewed and deleted</li>
           </ul>
         </div>
-        <div className="flow-card" aria-label="Memfy system architecture">
+        <div className="flow-card" aria-label="Siri Agent system architecture">
           <div className="flow-node primary"><small>YOUR PHONE</small><b>Siri + Shortcut</b></div>
           <span className="flow-arrow">↓</span>
-          <div className="flow-node brain"><small>MEMFY BACKEND</small><b>Reasoning Agent</b></div>
+          <div className="flow-node brain"><small>SECURE BACKEND</small><b>Reasoning Agent</b></div>
           <div className="flow-split"><span>↙</span><span>↘</span></div>
           <div className="flow-bottom">
             <div className="flow-node"><small>MEMORY</small><b>MongoDB</b></div>
@@ -167,15 +167,15 @@ export default function Home() {
           <p className="kicker">YOUR SIRI. UPGRADED.</p>
           <h2>Your AI agent is<br />one phrase away.</h2>
           <p>Be among the first to connect your iPhone and turn everyday voice commands into real action.</p>
-          <a className="button button-light" href="mailto:hello@memfy.ai?subject=Memfy%20Early%20Access">Request early access <span>↗</span></a>
+          <a className="button button-light" href="#top">Request early access <span>↗</span></a>
           <small>Works with the Siri already on your iPhone.</small>
         </div>
       </section>
 
       <footer className="footer shell">
-        <a className="brand" href="#top"><span className="brand-mark"><i /><i /><i /></span><span>memfy</span></a>
+        <a className="brand" href="#top"><span className="brand-mark"><i /><i /><i /></span><span>Siri Agent</span></a>
         <p>Give your voice the power to act.</p>
-        <span>© 2026 Memfy</span>
+        <span>© 2026 Siri Agent</span>
       </footer>
     </main>
   );
