@@ -8,6 +8,7 @@ function requestIp(request: NextRequest) {
   return (
     request.headers.get("x-vercel-forwarded-for") ??
     request.headers.get("x-forwarded-for") ??
+    request.headers.get("x-real-ip") ??
     "unknown"
   ).split(",")[0].trim();
 }
@@ -26,11 +27,14 @@ export async function POST(request: NextRequest) {
     }
 
     const db = await getDatabase();
-    const ipHash = hashIdentifier(requestIp(request));
+    const ip = requestIp(request);
+    const ipHash = hashIdentifier(ip);
     const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const recentAgents = await db.collection("agents").countDocuments({ ipHash, createdAt: { $gte: since } });
+    const recentAgents = ip === "unknown"
+      ? 0
+      : await db.collection("agents").countDocuments({ ipHash, createdAt: { $gte: since } });
 
-    if (recentAgents >= 5) {
+    if (recentAgents >= 25) {
       return NextResponse.json(
         { error: "This device has reached today’s test-agent limit." },
         { status: 429 },
