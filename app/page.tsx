@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ConnectSiri } from "./components/ConnectSiri";
 import { BrandStrip, SiriSimulation } from "./components/SiriSimulation";
 
 export const metadata: Metadata = {
@@ -38,7 +39,7 @@ export default function Home() {
         <div className="nav-links">
           <a href="#how">How it works</a>
           <a href="#actions">What it can do</a>
-          <a className="nav-cta" href="#early-access">Get early access</a>
+          <a className="nav-cta" href="#connect">Connect Siri</a>
         </div>
       </nav>
 
@@ -51,7 +52,7 @@ export default function Home() {
             remember, and take action across your apps.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#early-access">Connect your Siri <span>↗</span></a>
+            <a className="button button-primary" href="#connect">Connect your Siri <span>↗</span></a>
             <a className="button button-ghost" href="#demo">See how it works <span>↓</span></a>
           </div>
           <div className="trust-line">
@@ -145,13 +146,32 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="connect-section" id="connect">
+        <div className="shell connect-layout">
+          <div className="connect-copy">
+            <p className="kicker">WORKING MVP</p>
+            <h2>Connect your real Siri.<br />Talk to your live agent.</h2>
+            <p>
+              Create a private endpoint, test the agent instantly, and wire it into the Shortcuts app already on your iPhone.
+              Gemini answers in real time while MongoDB remembers the conversation.
+            </p>
+            <ul>
+              <li><span>01</span> Create your private agent</li>
+              <li><span>02</span> Test the live conversation</li>
+              <li><span>03</span> Add the webhook to Shortcuts</li>
+            </ul>
+          </div>
+          <ConnectSiri />
+        </div>
+      </section>
+
       <section className="cta-section" id="early-access">
         <div className="cta-orb" />
         <div className="shell cta-inner">
           <p className="kicker">YOUR SIRI. UPGRADED.</p>
           <h2>Your AI agent is<br />one phrase away.</h2>
-          <p>Be among the first to connect your iPhone and turn everyday voice commands into real action.</p>
-          <a className="button button-light" href="#top">Request early access <span>↗</span></a>
+          <p>Create your private agent now and connect it to Apple Shortcuts in a few minutes.</p>
+          <a className="button button-light" href="#connect">Connect Siri now <span>↗</span></a>
           <small>Works with the Siri already on your iPhone.</small>
         </div>
       </section>

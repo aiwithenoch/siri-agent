@@ -12,7 +12,7 @@ iPhone Siri -> Apple Shortcut -> Agent API -> Composio tools
                                       +-> MongoDB memory
 ```
 
-This repository currently contains the public landing page and interactive product simulation. The backend will be added incrementally.
+The repository includes the public landing page, live agent onboarding, a secure Siri webhook, and MongoDB-backed conversational memory.
 
 ## Stack
 
@@ -20,7 +20,8 @@ This repository currently contains the public landing page and interactive produ
 - TypeScript
 - Tailwind CSS
 - Vercel
-- MongoDB Atlas (backend foundation)
+- MongoDB Atlas
+- Google Gemini
 - Composio (planned tool connections)
 
 ## Local development
@@ -46,15 +47,15 @@ Backend work will use:
 
 ```text
 MONGODB_URI=
+GEMINI_API_KEY=
 ```
 
 Never commit `.env` files or credentials. Environment files are ignored by Git.
 
 ## Roadmap
 
-- Siri Shortcut onboarding
-- Authenticated webhook API
-- Per-user MongoDB memory
+- Shareable prebuilt Apple Shortcut
+- Account dashboard and webhook revocation
 - Composio account connections and tool calling
 - Streaming and spoken responses
 - Audit log and permission controls
