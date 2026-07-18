@@ -1,27 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  siGmail,
-  siGooglecalendar,
-  siGoogledrive,
-  siMongodb,
-  siNotion,
-  siWhatsapp,
-  siZoom,
-  type SimpleIcon,
-} from "simple-icons";
-
 type BrandKey = "gmail" | "calendar" | "whatsapp" | "notion" | "drive" | "zoom" | "mongodb";
 
-const brands: Record<BrandKey, SimpleIcon> = {
-  gmail: siGmail,
-  calendar: siGooglecalendar,
-  whatsapp: siWhatsapp,
-  notion: siNotion,
-  drive: siGoogledrive,
-  zoom: siZoom,
-  mongodb: siMongodb,
+const brands: Record<BrandKey, { title: string; src: string }> = {
+  gmail: { title: "Gmail", src: "/brands/gmail.svg" },
+  calendar: { title: "Google Calendar", src: "/brands/googlecalendar.svg" },
+  whatsapp: { title: "WhatsApp", src: "/brands/whatsapp.svg" },
+  notion: { title: "Notion", src: "/brands/notion.svg" },
+  drive: { title: "Google Drive", src: "/brands/googledrive.svg" },
+  zoom: { title: "Zoom", src: "/brands/zoom.svg" },
+  mongodb: { title: "MongoDB", src: "/brands/mongodb.svg" },
 };
 
 const scenarios = [
@@ -57,9 +46,7 @@ export function BrandLogo({ brand, showName = true }: { brand: BrandKey; showNam
   const icon = brands[brand];
   return (
     <span className={`real-brand real-brand-${brand}`} title={icon.title}>
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d={icon.path} />
-      </svg>
+      <span className="brand-icon" style={{ maskImage: `url(${icon.src})`, WebkitMaskImage: `url(${icon.src})` }} aria-hidden="true" />
       {showName && <span>{icon.title}</span>}
     </span>
   );
