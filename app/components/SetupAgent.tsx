@@ -81,7 +81,8 @@ export function SetupAgent({ token }: { token: string }) {
     setError("");
     try {
       const response = await fetch("/api/connections", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token, toolkit }) });
-      const data = await response.json();
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : {};
       if (!response.ok) throw new Error(data.error ?? "Could not connect this app.");
       window.location.assign(data.redirectUrl);
     } catch (caught) {
